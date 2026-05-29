@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellation Network Animation</title>
+    <style>
+        /* Reset and full-screen setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0b0f19;
+            /* Deep space dark blue */
+            font-family: sans-serif;
+        }
+
+        /* Canvas occupies the full background */
+        #constellationCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Optional Overlay Content to show it works as a background */
+        .content-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            text-align: center;
+            pointer-events: none;
+            /* Allows mouse events to pass through to the canvas */
+            z-index: 1;
+        }
+
+        .content-overlay h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .content-overlay p {
+            font-size: 1rem;
+            color: #8da2bb;
+            letter-spacing: 0.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="constellationCanvas"></canvas>
+
+    <div class="content-overlay">
+        <h1>Constellation</h1>
+        <p>Move your mouse to interact with the network</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('constellationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Configuration Settings
+        const config = {
+            particleCount: 120,       // Number of stars/nodes
+            connectionDistance: 120, // Max distance to draw a line between nodes
+            particleSpeed: 0.7,      // Speed multiplier
+            particleColor: 'rgba(156, 192, 255, 0.8)', // Node color
+            lineColor: 'rgba(156, 192, 255, ',         // Line color base (opacity added dynamically)
+            particleRadius: 2.5      // Base size of nodes
+        };
+
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 180 }; // Mouse interactive radius
+
+        // Track mouse movement
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        // Clear mouse position when it leaves the window
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Adjust particle density based on screen size
+            if (window.innerWidth < 768) {
+                config.particleCount = 50;
+                config.connectionDistance = 80;
+            } else {
+                config.particleCount = 120;
+                config.connectionDistance = 120;
+            }
+        }
+
+        // Particle Blueprint Object
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                // Random directions (-0.5 to 0.5) multiplied by speed
+                this.vx = (Math.random() - 0.5) * config.particleSpeed;
+                this.vy = (Math.random() - 0.5) * config.particleSpeed;
+                this.radius = Math.random() * config.particleRadius + 1;
+            }
+
+            // Draw individual particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = config.particleColor;
+                ctx.fill();
+            }
+
+            // Update particle position and bounce off edges
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.vx = -this.vx;
+                if (this.y > canvas.height || this.y < 0) this.vy = -this.vy;
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.draw();
+            }
+        }
+
+        // Initialize particle array
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < config.particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Check distances and draw connecting lines
+        function connectParticles() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a + 1; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // Draw line if particles are close enough
+                    if (distance < config.connectionDistance) {
+                        // Fade line out the further apart the particles get
+                        const opacity = 1 - (distance / config.connectionDistance);
+                        ctx.strokeStyle = config.lineColor + opacity * 0.25 + ')';
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+
+                // Interaction with Mouse
+                if (mouse.x !== null && mouse.y !== null) {
+                    const mdx = particles[a].x - mouse.x;
+                    const mdy = particles[a].y - mouse.y;
+                    const mDistance = Math.sqrt(mdx * mdx + mdy * mdy);
+
+                    if (mDistance < mouse.radius) {
+                        const mOpacity = 1 - (mDistance / mouse.radius);
+                        ctx.strokeStyle = config.lineColor + mOpacity * 0.4 + ')';
+                        ctx.lineWidth = 1.2;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Main Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw all nodes
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+            }
+
+            // Draw lines between nodes
+            connectParticles();
+
+            requestAnimationFrame(animate);
+        }
+
+        // Run
+        resizeCanvas();
+        initParticles();
+        animate();
+    </script>
+</body>
+
+</html>
