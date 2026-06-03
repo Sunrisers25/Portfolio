@@ -700,44 +700,21 @@
       box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.2);
     }
 
-    /* ─── PROJECT SCREENSHOT PLACEHOLDER ─── */
+    /* ─── PROJECT SCREENSHOT ─── */
     .proj-screenshot {
       width: 100%;
-      height: 130px;
+      height: 150px;
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.07) 0%, rgba(var(--secondary-rgb), 0.04) 100%);
-      border: 1px solid rgba(var(--primary-rgb), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      object-fit: cover;
       margin-bottom: 18px;
-      position: relative;
-      overflow: hidden;
+      border: 1px solid rgba(var(--primary-rgb), 0.15);
+      transition: var(--transition-main);
+      display: block;
     }
-    .proj-screenshot::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(var(--primary-rgb), 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(var(--primary-rgb), 0.04) 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
-    .proj-screenshot-label {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text3);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-    }
-    .proj-screenshot-icon {
-      font-size: 26px;
-      position: absolute;
-      bottom: 10px;
-      right: 12px;
-      opacity: 0.1;
+    .project-card:hover .proj-screenshot {
+      border-color: var(--primary);
+      transform: scale(1.02);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
 
     /* ─── PROJECT LINKS ─── */
@@ -3058,10 +3035,7 @@
     <div class="projects-grid">
       <div class="project-card" style="cursor: pointer;"
         onclick="openProjectModal('pharmacare', 'PharmaCare Pro', 'An AI-powered healthcare platform utilizing Graph Neural Network simulations to predict complex drug-drug interactions, wrapped in a high-fidelity dashboard engineered during an intensive 36-hour development sprint.', 'Healthcare AI', document.getElementById('ps-01').innerHTML)">
-        <div class="proj-screenshot">
-          <span class="proj-screenshot-label">PharmaCare Pro</span>
-          <i class="fas fa-heartbeat proj-screenshot-icon" style="color:var(--primary)"></i>
-        </div>
+        <img src="pharmacare.png" alt="PharmaCare Pro" class="proj-screenshot" />
         <div class="proj-num">01</div>
         <span class="proj-tag pt-blue">Healthcare AI</span>
         <div class="proj-title">PharmaCare Pro</div>
@@ -3085,10 +3059,7 @@
       </div>
       <div class="project-card" style="cursor: pointer;"
         onclick="openProjectModal('tbscreen', 'TB Screening System', 'An advanced medical imaging pipeline that automates tuberculosis screening. Integrates Grad-CAM activation mapping to visually highlight diagnostic regions of interest on chest X-rays for clinical validation.', 'Medical Imaging', document.getElementById('ps-02').innerHTML)">
-        <div class="proj-screenshot">
-          <span class="proj-screenshot-label">TB Screening System</span>
-          <i class="fas fa-lungs proj-screenshot-icon" style="color:var(--accent)"></i>
-        </div>
+        <img src="tbscreen.png" alt="TB Screening System" class="proj-screenshot" />
         <div class="proj-num">02</div>
         <span class="proj-tag pt-green">Medical Imaging</span>
         <div class="proj-title">TB Screening System</div>
@@ -3111,10 +3082,7 @@
       </div>
       <div class="project-card" style="cursor: pointer;"
         onclick="openProjectModal('estimator', 'AI Motor Claim Estimator', 'An AI-powered computer vision platform utilizing YOLOv8 for automated vehicle damage detection, custom severity classification rules, a parts cost database, and dynamic ReportLab PDF claims report generation.', 'Computer Vision / AI', document.getElementById('ps-03').innerHTML)">
-        <div class="proj-screenshot">
-          <span class="proj-screenshot-label">AI Motor Claim Estimator</span>
-          <i class="fas fa-car-crash proj-screenshot-icon" style="color:var(--warning)"></i>
-        </div>
+        <img src="estimator.png" alt="AI Motor Claim Estimator" class="proj-screenshot" />
         <div class="proj-num">03</div>
         <span class="proj-tag pt-blue">Computer Vision / AI</span>
         <div class="proj-title">AI Motor Claim Estimator</div>
