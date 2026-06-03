@@ -1003,30 +1003,6 @@
       line-height: 1.6;
     }
 
-    .resume-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 28px;
-      padding: 13px 26px;
-      border: 1px solid var(--accent);
-      border-radius: 9999px;
-      color: var(--accent);
-      text-decoration: none;
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      transition: var(--transition-main);
-      background: rgba(var(--accent-rgb), 0.02);
-    }
-
-    .resume-btn:hover {
-      background: rgba(var(--accent-rgb), 0.08);
-      box-shadow: 0 8px 25px rgba(var(--accent-rgb), 0.25);
-      transform: translateY(-2px);
-    }
-
     /* ─── PROJECTS ─── */
     #services {
       border-top: 1px solid var(--border);
@@ -2827,9 +2803,6 @@
           dive deep into the world of machine learning — building healthcare diagnostics pipelines, drug interaction
           predictors, and TB screening systems. As President of CodePulse Club, I lead hackathons, mentor peers, and
           execute technical events at scale.</p>
-        <a href="resume.pdf" download="Naveen_Reddy_Resume.pdf" class="resume-btn" style="margin-top: 10px;">
-          <i class="fas fa-download"></i> GET MY RESUME
-        </a>
       </div>
       <div class="stat-grid">
         <div class="stat-box s1">
@@ -4280,7 +4253,7 @@
 
       // Custom questions matching specific details
       if (q.includes('resume') || q.includes('cv') || q.includes('get resume')) {
-        return `<p>You can download Naveen's official CV by clicking the <strong>GET MY RESUME</strong> button in the <strong>About Me</strong> section above, or <a href="resume.pdf" download="Naveen_Reddy_Resume.pdf" style="color: var(--secondary); font-weight: 700; text-decoration: none;">click here</a> to download it directly!</p>`;
+        return `<p>You can download Naveen's official CV: <a href="resume.pdf" download="Naveen_Reddy_Resume.pdf" style="color: var(--secondary); font-weight: 700; text-decoration: none;">click here</a> to download it directly!</p>`;
       }
 
       if (q.includes('hackathon') || q.includes('codestorm')) {
